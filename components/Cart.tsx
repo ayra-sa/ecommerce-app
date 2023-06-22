@@ -8,8 +8,8 @@ import {
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import React, { useRef } from "react";
-import { fixPrice } from "./Banner";
 import CheckoutButton from "./CheckoutButton";
+import { fixPrice } from "@/lib/fixPrice";
 
 type Props = {};
 
@@ -19,7 +19,6 @@ export default function Cart({}: Props) {
   const {
     setShowCart,
     cartItems,
-    qty,
     onRemove,
     toggleCartItemQuanitity,
     totalPrice,

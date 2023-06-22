@@ -1,19 +1,10 @@
-import urlFor from "@/lib/urlFor";
 import { BannerType } from "@/typing";
-import Image from "next/image";
-import MyBrand from "./MyBrand";
 import Link from "next/link";
 import ImageItem from "./ImageItem";
+import { fixPrice } from "@/lib/fixPrice";
 
 type Props = {
-  banner: [BannerType];
-};
-
-export const fixPrice = (price: number) => {
-  return price.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  banner: BannerType[];
 };
 
 export default function Banner({ banner }: Props) {
@@ -27,7 +18,7 @@ export default function Banner({ banner }: Props) {
         <p className="text-2xl">GET SPECIAL PRICE..</p>
       </div>
       <div className="w-1/2 w flex flex-col md:flex-row gap-x-5 items-center">
-        <ImageItem imageAsset={banner[0].image[0].asset._ref} alt={banner[0].name} width="w-52" />
+        <ImageItem imageAsset={banner[0].image[0]} alt={banner[0].name} width="w-52" />
         <div>
           <h2 className="text-2xl">{banner[0].name}</h2>
           <p>Just {fixPrice(banner[0].price)}</p>

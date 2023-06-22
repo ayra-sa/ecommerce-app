@@ -6,7 +6,7 @@ type Props = {};
 
 const accounts = [
   {network: "twitter", url: "https://twitter.com"},
-  {network: "linkedin", url: "https://twitter.com"},
+  {network: "linkedin", url: "https://linkedin.com"},
   {network: "instagram", url: "https://instagram.com"},
 ]
 

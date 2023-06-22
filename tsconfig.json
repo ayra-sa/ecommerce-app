@@ -19,6 +19,6 @@
     },
     "useUnknownInCatchVariables": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "context/StateContext.js"],
   "exclude": ["node_modules"]
 }

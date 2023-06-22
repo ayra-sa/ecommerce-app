@@ -8,7 +8,7 @@ export interface ProductType {
     current: string;
   };
   details: Array;
-  ratings: Array
+  ratings: number[]
 }
 
 export interface BannerType {
@@ -45,3 +45,12 @@ type SanityImageAsset = {
   size: number;
   url: string;
 };
+
+type ItemImageType = {
+  asset: {
+    _ref: string
+    _type: string
+  }
+  _key: string
+  _type: string
+}

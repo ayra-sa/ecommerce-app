@@ -7,7 +7,7 @@ import MyBrand from "./MyBrand";
 type Props = {};
 
 export default function Header({}: Props) {
-  const { showCart, setShowCart, totalQuantities, setTotalQuantities, cartItems } =
+  const { showCart, setShowCart, cartItems } =
     useStateContext();
 
   return (

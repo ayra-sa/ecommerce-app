@@ -1,5 +1,4 @@
 import { loadStripe } from "@stripe/stripe-js";
-import { useState } from "react";
 import { toast } from "react-hot-toast";
 
 type Props = {
