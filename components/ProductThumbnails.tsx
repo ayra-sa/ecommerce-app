@@ -1,7 +1,6 @@
-import React from "react";
+ 
 import Image from "next/image";
 import urlFor from "@/lib/urlFor";
-import Skeleton from "react-loading-skeleton";
 
 type ProductImageProps = {
   i: number;

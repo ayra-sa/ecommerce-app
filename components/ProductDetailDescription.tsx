@@ -1,5 +1,5 @@
 import { ProductType } from "@/typing";
-import React from "react";
+ 
 import ProductDetailRating from "./ProductDetailRating";
 import { fixPrice } from "@/lib/fixPrice";
 import ProductQuantities from "./ProductQuantities";

@@ -1,5 +1,5 @@
 import { useStateContext } from "@/context/StateContext";
-import React from "react";
+ 
 
 type Props = {
     product: {}

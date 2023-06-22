@@ -1,7 +1,7 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
+ 
 
 type Props = {};
 

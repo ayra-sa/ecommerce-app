@@ -10,7 +10,7 @@ import Skeleton from "react-loading-skeleton";
 
 type Props = {
   product: ProductType;
-  products: [ProductType];
+  products: ProductType[];
 };
 
 type SlugProps = {
@@ -28,7 +28,7 @@ const LazyProductThumbnails = lazy(
 const LazyProductDetailDescription = lazy(
   () => import("@/components/ProductDetailDescription")
 );
-const LazyProduct = lazy(() => import("@/components/Product"))
+const LazyProduct = lazy(() => import("@/components/Product"));
 
 export default function ProductDetail({ product, products }: Props) {
   const { image, name, ratings } = product;
@@ -36,7 +36,6 @@ export default function ProductDetail({ product, products }: Props) {
 
   const [index, setIndex] = useState<number>(0);
   const [average, setAverage] = useState<number | null>(null);
-  // const [isLoading, setIsLoading] = useState<boolean>(true);
   const randomNum = useRandomNumbers(1, 7, 5);
 
   const newProducts = randomNum.map((r) => products[r]);
@@ -62,8 +61,8 @@ export default function ProductDetail({ product, products }: Props) {
             <Suspense fallback={<Skeleton height={250} />}>
               <LazyProductDetailImage image={image} index={index} name={name} />
             </Suspense>
-            <div className="flex gap-x-2 items-center px-5 md:px-0">
-              <Suspense fallback={<Skeleton height={100} />}>
+            <Suspense fallback={<Skeleton height={100} />}>
+              <div className="flex gap-x-2 items-center px-5 md:px-0">
                 {image?.map((item, i) => {
                   return (
                     <LazyProductThumbnails
@@ -75,23 +74,26 @@ export default function ProductDetail({ product, products }: Props) {
                     />
                   );
                 })}
-              </Suspense>
-            </div>
+              </div>
+            </Suspense>
           </div>
           <Suspense fallback={<Skeleton count={5} />}>
-            <LazyProductDetailDescription product={product} averageRating={average} />
+            <LazyProductDetailDescription
+              product={product}
+              averageRating={average}
+            />
           </Suspense>
         </div>
 
         <div className="mt-20 px-5 lg:px-0">
           <h2 className="title">You Might Like This</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-20 mt-5 gap-5">
-            <Suspense fallback={<Skeleton height={200} />}>
+          <Suspense fallback={<Skeleton height={200} />}>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-20 mt-5 gap-5">
               {newProducts.map((product) => (
                 <LazyProduct key={product._id} product={product} />
               ))}
-            </Suspense>
-          </div>
+            </div>
+          </Suspense>
         </div>
       </section>
     </Layout>

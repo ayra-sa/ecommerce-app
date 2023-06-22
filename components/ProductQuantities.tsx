@@ -1,6 +1,6 @@
 import { useStateContext } from "@/context/StateContext";
 import { MinusSmallIcon, PlusSmallIcon } from "@heroicons/react/24/solid";
-import React from "react";
+ 
 
 type Props = {};
 

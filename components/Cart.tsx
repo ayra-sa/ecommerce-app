@@ -1,13 +1,11 @@
 import { useStateContext } from "@/context/StateContext";
-import urlFor from "@/lib/urlFor";
 import {
   MinusSmallIcon,
   PlusSmallIcon,
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
-import Image from "next/image";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import CheckoutButton from "./CheckoutButton";
 import { fixPrice } from "@/lib/fixPrice";
 import ImageItem from "./ImageItem";

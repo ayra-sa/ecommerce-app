@@ -1,5 +1,5 @@
 import { StarIcon } from "@heroicons/react/24/solid";
-import React from "react";
+ 
 
 type Props = {
     averageRating: number | null

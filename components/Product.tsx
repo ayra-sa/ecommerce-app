@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+ 
 import { ProductType } from "@/typing";
 import ImageItem from "./ImageItem";
 import { fixPrice } from "@/lib/fixPrice";

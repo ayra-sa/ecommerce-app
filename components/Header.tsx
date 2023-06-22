@@ -1,5 +1,5 @@
 import { useStateContext } from "@/context/StateContext";
-import React from "react";
+ 
 import Cart from "./Cart";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import MyBrand from "./MyBrand";

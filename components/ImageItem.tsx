@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+ 
 import urlFor from "@/lib/urlFor";
 import { SanityImageAsset } from "@/typing";
 
