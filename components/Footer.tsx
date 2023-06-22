@@ -12,10 +12,10 @@ const accounts = [
 
 export default function Footer({}: Props) {
   return (
-    <footer className="py-10 border-t-2 border-slate-300 px-5 md:px-0">
+    <footer className="py-10 border-t-2 border-slate-300 px-5 lg:px-0">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row gap-10 justify-between">
-          <div className="w-4/5 lg:w-2/5">
+          <div className="w-4/5 md:w-3/5 lg:w-2/5">
             <p>
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat
               sit porro totam repellat voluptatibus atque possimus cumque.

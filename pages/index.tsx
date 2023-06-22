@@ -26,12 +26,12 @@ const Home = ({ products, categories, banner }: Props) => {
         <Suspense fallback={<Skeleton height={300} />}>
           <LazyBanner banner={banner} />
         </Suspense>
-        <Suspense fallback={<Skeleton height={50} count={categories.length} />}>
+        <Suspense fallback={<Skeleton height={50} count={4} />}>
           <LazyCategory categories={categories} />
         </Suspense>
-        <div>
+        <div className="px-5 lg:px-0">
           <h2 className="title">All Products</h2>
-          <div className="lg:grid lg:grid-cols-4 lg:grid-flow-row gap-5 mb-10 mt-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-row gap-5 mb-10 mt-5">
             <Suspense fallback={<Skeleton height={200} count={products.length} />}>
               {products?.map((product) => (
                 <LazyProduct key={product._id} product={product} />

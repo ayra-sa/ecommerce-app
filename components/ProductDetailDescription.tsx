@@ -23,7 +23,7 @@ export default function ProductDetailDescription({product, averageRating}: Props
         <ProductDetailRating averageRating={averageRating} ratingsCount={ratings.length}/>
       </div>
       <h3 className="text-3xl">{fixPrice(price)}</h3>
-      <div className="w-2/3">
+      <div className="w-11/12 md:w-4/5 lg:w-2/3">
         <h4>Details: </h4>
         <PortableText value={details[0]} />
       </div>

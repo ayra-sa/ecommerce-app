@@ -12,7 +12,7 @@ export default function Header({}: Props) {
 
   return (
     <header className="shadow-md">
-      <nav className="container mx-auto flex justify-between p-5 md:px-0">
+      <nav className="container mx-auto flex justify-between p-5 lg:px-0">
         <MyBrand />
         <button className="relative" onClick={() => setShowCart(true)}>
           <ShoppingBagIcon className="w-6 h-6" />
