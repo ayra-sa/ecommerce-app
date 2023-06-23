@@ -11,7 +11,7 @@ export default function Banner({ banner }: Props) {
   return (
     <Link
       href={`/product/${banner[0].slug.current}`}
-      className="flex w-full h-80 bg-banner md:rounded-md mt-1 mb-10 text-white p-5"
+      className="flex w-full h-80 bg-banner md:rounded-md mt-1 lg:mt-5 mb-10 text-white p-5"
     >
       <div className="w-1/2">
         <h2 className="text-xl lg:text-4xl my-2">NEW PRODUCT!!</h2>

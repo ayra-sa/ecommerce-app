@@ -20,7 +20,7 @@ const Home = ({ products, categories, banner }: Props) => {
   return (
     <Layout>
       <Head>
-        <title>Arya Shop | E-commerce App</title>
+        <title>AyShop | E-commerce App</title>
       </Head>
       <section className="min-h-screen container mx-auto">
         <Suspense fallback={<Skeleton height={300} />}>
