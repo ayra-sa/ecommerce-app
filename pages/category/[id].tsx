@@ -1,78 +1,45 @@
-import CategoryBanner from "@/components/CategoryBanner";
 import Layout from "@/components/Layout";
-import { client } from "@/lib/sanity.client";
-import { ProductType } from "@/typing";
-import Head from "next/head";
-import { Suspense, lazy } from "react";
-import Skeleton from "react-loading-skeleton";
+import { LazyCategoryBanner, LazyProduct } from "@/components/lazy";
+import LoadingBannerCategory from "@/components/loading/LoadingBannerCategory";
+import LoadingProducts from "@/components/loading/LoadingProducts";
+import { fetchCategoryDetail, fetchProductCategory } from "@/lib/fetchQuery";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { Suspense } from "react";
 
-type Props = {
-  category: {
-    title: string;
+export default function CategoryDetail() {
+  const { id } = useRouter().query;
+
+  const { data: category } = useQuery(["category", id], fetchCategoryDetail);
+  const { data: productCategory } = useQuery(
+    ["productCaetgory", id],
+    fetchProductCategory
+  );
+
+  const headContext: HeadContext = {
+    title: category ? `${category.title} Category` : "Loading...",
+    meta: [],
   };
-  productCategory: ProductType[];
-};
 
-type ParamsProps = {
-  params: {
-    id: string;
-  };
-};
-
-const LazyProduct = lazy(() => import("@/components/Product"));
-
-export default function CategoryDetail({ category, productCategory }: Props) {
   return (
-    <Layout>
-      <Head>
-        <title>{`${category.title} Category`}</title>
-      </Head>
+    <Layout headContext={headContext}>
       <section className="min-h-screen container mx-auto mt-5">
-        <CategoryBanner title={category.title} />
+        <Suspense fallback={<LoadingBannerCategory />}>
+          <LazyCategoryBanner title={category?.title} />
+        </Suspense>
 
-        <Suspense fallback={<Skeleton height={200} count={4} />}>
-          <div className="flex gap-x-5 mt-20">
-            {productCategory.map((product) => (
+        <div className="flex gap-x-5 mt-20">
+          <Suspense fallback={<LoadingProducts count={[1,2,3]} />}>
+            {productCategory?.map((product: ProductType) => (
               <LazyProduct
                 key={product._id}
                 className="w-1/4 shadow-md rounded-md py-5"
                 product={product}
               />
             ))}
-          </div>
-        </Suspense>
+          </Suspense>
+        </div>
       </section>
     </Layout>
   );
 }
-
-export const getStaticPaths = async () => {
-  const query = `*[_type=='category']{
-          _id
-      }`;
-
-  const categories = await client.fetch(query);
-
-  const paths = categories.map((category: any) => {
-    return {
-      params: { id: category._id.toString() },
-    };
-  });
-
-  return {
-    paths,
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps = async ({ params: { id } }: ParamsProps) => {
-  const query = `*[_type=='category' && _id == '${id}'][0]`;
-  const prodQuery = `*[_type=='product' && categories[0]._ref == '${id}']`;
-
-  const category = await client.fetch(query);
-  const productCategory = await client.fetch(prodQuery);
-
-  return {
-    props: { category, productCategory },
-  };
-};

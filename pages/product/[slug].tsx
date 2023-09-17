@@ -1,69 +1,71 @@
 import { useStateContext } from "@/context/StateContext";
-import { client } from "@/lib/sanity.client";
-import { ProductType } from "@/typing";
-import Head from "next/head";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Layout from "@/components/Layout";
-import calculateAverage from "@/lib/calculateAverage";
 import useRandomNumbers from "@/lib/useRandomNumbers";
-import Skeleton from "react-loading-skeleton";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { fetchProductDetail, fetchProducts } from "@/lib/fetchQuery";
+import LoadingProductDetail from "@/components/loading/LoadingProductDetail";
+import {
+  LazyProduct,
+  LazyProductDetailDescription,
+  LazyProductDetailImage,
+  LazyProductThumbnails,
+} from "@/components/lazy";
+import calculateAverage from "@/lib/calculateAverage";
+import LoadingProducts from "@/components/loading/LoadingProducts";
 
-type Props = {
-  product: ProductType;
-  products: ProductType[];
-};
+export default function ProductDetail() {
+  const { slug } = useRouter().query;
 
-type SlugProps = {
-  params: {
-    slug: string;
-  };
-};
+  const { data: product } = useQuery(["product", slug], fetchProductDetail);
+  const { data: products } = useQuery<ProductType[]>(
+    ["products"],
+    fetchProducts
+  );
 
-const LazyProductDetailImage = lazy(
-  () => import("@/components/ProductDetailImage")
-);
-const LazyProductThumbnails = lazy(
-  () => import("@/components/ProductThumbnails")
-);
-const LazyProductDetailDescription = lazy(
-  () => import("@/components/ProductDetailDescription")
-);
-const LazyProduct = lazy(() => import("@/components/Product"));
-
-export default function ProductDetail({ product, products }: Props) {
-  const { image, name, ratings } = product;
   const { setQty } = useStateContext();
 
   const [index, setIndex] = useState<number>(0);
   const [average, setAverage] = useState<number | null>(null);
-  const randomNum = useRandomNumbers(1, 7, 5);
 
-  const newProducts = randomNum.map((r) => products[r]);
+  const randomNum = useRandomNumbers(1, 7, 5);
+  let newProducts;
+
+  if (products) {
+    newProducts = randomNum.map((r) => products[r]);
+  }
+
+  const headContext: HeadContext = {
+    title: product ? product.name : "Loading...",
+    meta: [],
+  };
 
   useEffect(() => {
     setIndex(0);
     setQty(1);
-  }, [product.slug, setQty]);
+  }, [slug, setQty]);
 
   useEffect(() => {
-    const averageResult = calculateAverage(ratings);
-    setAverage(averageResult);
-  }, [product.slug, ratings]);
+    if (product && product.ratings) {
+      const averageResult = calculateAverage(product.ratings);
+      setAverage(averageResult);
+    }
+  }, [slug, product]);
 
   return (
-    <Layout>
-      <Head>
-        <title>{name}</title>
-      </Head>
+    <Layout headContext={headContext}>
       <section className="container mx-auto min-h-screen mt-5">
         <div className="flex flex-col gap-y-6 md:flex-row w-full gap-x-10 md:px-5">
-          <div className="flex flex-col gap-y-5 md:w-1/2 lg:w-[35%]">
-            <Suspense fallback={<Skeleton height={250} />}>
-              <LazyProductDetailImage image={image} index={index} name={name} />
-            </Suspense>
-            <Suspense fallback={<Skeleton height={100} />}>
+          <Suspense fallback={<LoadingProductDetail />}>
+            <div className="flex flex-col gap-y-5 md:w-1/2 lg:w-[35%]">
+              <LazyProductDetailImage
+                image={product?.image}
+                index={index}
+                name={product?.name}
+              />
               <div className="flex gap-x-2 items-center px-5 md:px-0">
-                {image?.map((item, i) => {
+                {product?.image.map((item: any, i: number) => {
                   return (
                     <LazyProductThumbnails
                       key={i}
@@ -75,9 +77,7 @@ export default function ProductDetail({ product, products }: Props) {
                   );
                 })}
               </div>
-            </Suspense>
-          </div>
-          <Suspense fallback={<Skeleton count={5} />}>
+            </div>
             <LazyProductDetailDescription
               product={product}
               averageRating={average}
@@ -86,10 +86,10 @@ export default function ProductDetail({ product, products }: Props) {
         </div>
 
         <div className="mt-20 px-5 lg:px-0">
-          <h2 className="title">You Might Like This</h2>
-          <Suspense fallback={<Skeleton height={200} />}>
+          <Suspense fallback={<LoadingProducts count={[1, 2, 3, 4]} />}>
+            <h2 className="title">You Might Like This</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-20 mt-5 gap-5">
-              {newProducts.map((product) => (
+              {newProducts?.map((product) => (
                 <LazyProduct key={product._id} product={product} />
               ))}
             </div>
@@ -99,38 +99,3 @@ export default function ProductDetail({ product, products }: Props) {
     </Layout>
   );
 }
-
-export const getStaticPaths = async () => {
-  const query = `*[_type=='product']{
-        slug {
-            current
-        }
-    }`;
-
-  const products = await client.fetch(query);
-
-  const paths = products.map((product: ProductType) => {
-    return {
-      params: {
-        slug: product.slug.current,
-      },
-    };
-  });
-
-  return {
-    paths,
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps = async ({ params: { slug } }: SlugProps) => {
-  const query = `*[_type=='product' && slug.current == '${slug}'][0]`;
-  const productQuery = `*[_type=='product']`;
-
-  const product = await client.fetch(query);
-  const products = await client.fetch(productQuery);
-
-  return {
-    props: { product, products },
-  };
-};

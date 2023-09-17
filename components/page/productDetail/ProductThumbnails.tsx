@@ -1,6 +1,6 @@
- 
+ import React from "react";
 import Image from "next/image";
-import urlFor from "@/lib/urlFor";
+import urlFor from '../../../lib/urlFor'
 
 type ProductImageProps = {
   i: number;

@@ -1,33 +1,24 @@
 import Link from "next/link";
- 
+
 import ImageItem from "./ImageItem";
 
 type Props = {
-  categories: any;
+  category: CategoryType;
 };
 
-export default function Category({ categories }: Props) {
+export default function Category({ category }: Props) {
   return (
-    <div className="shadow-md w-full rounded-md px-5 py-10 mb-20">
-      <h2 className="title">Category</h2>
-      <div className="flex gap-x-3 items-center mt-5 overflow-x-scroll md:overflow-x-visible">
-        {categories.map((category: any) => {
-          return (
-            <Link
-              href={`category/${category._id}`}
-              key={category._id}
-              className="border border-slate-300 rounded-md px-5 py-2 md:w-1/4 lg:w-[10%] w-1/5 flex flex-col items-center gap-y-3 transition-all hover:border-slate-500"
-            >
-              <ImageItem
-                alt={category.title}
-                imageAsset={category.image}
-                width="w-24"
-              />
-              <h3 className="text-xs md:text-base">{category.title}</h3>
-            </Link>
-          );
-        })}
-      </div>
-    </div>
+    <Link
+      href={`category/${category._id}`}
+      key={category._id}
+      className="border border-slate-300 rounded-md px-5 py-2 md:w-1/4 lg:w-[10%] w-1/5 flex flex-col items-center gap-y-3 transition-all hover:border-slate-500"
+    >
+      <ImageItem
+        alt={category.title}
+        imageAsset={category.image}
+        width="w-24"
+      />
+      <h3 className="text-xs md:text-base">{category.title}</h3>
+    </Link>
   );
 }

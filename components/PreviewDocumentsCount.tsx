@@ -1,5 +1,4 @@
 import { usePreview } from "@/lib/sanity.preview"
-import { DocumentsCount, query } from './DocumentsCount'
 
 type Props = {
   query: string

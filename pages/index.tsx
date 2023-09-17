@@ -1,64 +1,64 @@
-import { client } from "@/lib/sanity.client";
-import Head from "next/head";
 import Layout from "@/components/Layout";
-import { BannerType, ProductType } from "@/typing";
-import { GetServerSideProps } from "next";
+import { fetchBanner, fetchCategories, fetchProducts } from "@/lib/fetchQuery";
+import { useQuery } from "@tanstack/react-query";
+import { FC, Suspense, startTransition, useEffect } from "react";
+
 import Skeleton from "react-loading-skeleton";
-import { lazy, Suspense } from "react";
+import { LazyBanner, LazyCategories, LazyProducts } from "@/components/lazy";
+import LoadingCategories from "@/components/loading/LoadingCategories";
+import LoadingProducts from "@/components/loading/LoadingProducts";
 
-const LazyBanner = lazy(() => import("@/components/Banner"));
-const LazyCategory = lazy(() => import("@/components/Category"));
-const LazyProduct = lazy(() => import("@/components/Product"));
+const Home: FC = () => {
+  const bannerQueryKey = ["banner"];
+  const categoryQueryKey = ["categories"];
+  const productQueryKey = ["products"];
+  const bannerQuery = useQuery<BannerType[]>(bannerQueryKey, fetchBanner);
+  const categoriesQuery = useQuery<CategoryType[]>(
+    categoryQueryKey,
+    fetchCategories
+  );
+  const productsQuery = useQuery<ProductType[]>(
+    productQueryKey,
+    fetchProducts  
+  );
 
-interface Props {
-  products: ProductType[];
-  categories: [];
-  banner: BannerType[];
-}
+  // useHydrate([bannerQuery, categoriesQuery, productsQuery])
 
-const Home = ({ products, categories, banner }: Props) => {
+  // useEffect(() => {
+  //   bannerQuery.refetch();
+  //   categoriesQuery.refetch();
+  //   productsQuery.refetch();
+  // }, []);
+
+  const headContext: HeadContext = {
+    title: "AyShop | E-commerce App",
+    meta: [
+      {
+        name: "description",
+        content: "AyShop created with Next js",
+      },
+    ],
+  };
+
   return (
-    <Layout>
-      <Head>
-        <title>AyShop | E-commerce App</title>
-      </Head>
+    <Layout headContext={headContext}>
       <section className="min-h-screen container mx-auto">
-        <Suspense fallback={<Skeleton height={300} />}>
-          <LazyBanner banner={banner} />
+        <Suspense fallback={<Skeleton height={320} />}>
+          <LazyBanner banner={bannerQuery.data} />
         </Suspense>
-        <Suspense fallback={<Skeleton height={50} count={4} />}>
-          <LazyCategory categories={categories} />
+
+        <Suspense fallback={<LoadingCategories />}>
+          <LazyCategories categories={categoriesQuery.data} />
         </Suspense>
-        <div className="px-5 lg:px-0">
-          <h2 className="title">All Products</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-row gap-5 mb-10 mt-5">
-            <Suspense fallback={<Skeleton height={200} count={products.length} />}>
-              {products?.map((product) => (
-                <LazyProduct key={product._id} product={product} />
-              ))}
-            </Suspense>
-          </div>
-        </div>
+
+        <Suspense
+          fallback={<LoadingProducts count={[1, 2, 3, 4, 5, 6, 7, 8]} />}
+        >
+          <LazyProducts products={productsQuery.data} />
+        </Suspense>
       </section>
     </Layout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const query = `*[_type == 'product']`;
-  const categoryQuery = `*[_type == 'category']`;
-  const bannerQuery = `*[_type == 'banner']`;
-  const products: ProductType[] = await client.fetch(query);
-  const categories: [] = await client.fetch(categoryQuery);
-  const banner: BannerType[] = await client.fetch(bannerQuery);
-
-  return {
-    props: {
-      products,
-      categories,
-      banner,
-    },
-  };
 };
 
 export default Home;

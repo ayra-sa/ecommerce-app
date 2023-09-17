@@ -1,20 +1,36 @@
 import { StateContext } from "@/context/StateContext";
 import "@/styles/globals.css";
+import "react-loading-skeleton/dist/skeleton.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
-import { Quicksand } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import { SessionProvider } from "next-auth/react";
 
-const quicksand = Quicksand({
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+const queryClient = new QueryClient();
+
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
-    <StateContext>
-      <Toaster />
-      <div className={quicksand.className}>
-        <Component {...pageProps} />
-      </div>
-    </StateContext>
+    <SessionProvider session={session}>
+      <style jsx global>{`
+        html {
+          font-family: ${poppins.style.fontFamily};
+        }
+      `}</style>
+      <QueryClientProvider client={queryClient}>
+        <StateContext>
+          <Toaster />
+          <Component {...pageProps} />
+        </StateContext>
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }

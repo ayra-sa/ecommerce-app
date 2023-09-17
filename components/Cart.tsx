@@ -6,7 +6,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { useRef } from "react";
-import CheckoutButton from "./CheckoutButton";
+import CheckoutButton from "./button/CheckoutButton";
 import { fixPrice } from "@/lib/fixPrice";
 import ImageItem from "./ImageItem";
 

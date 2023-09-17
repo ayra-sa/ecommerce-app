@@ -1,13 +1,18 @@
-import { BannerType } from "@/typing";
 import Link from "next/link";
-import ImageItem from "./ImageItem";
+import ImageItem from "../../ImageItem";
 import { fixPrice } from "@/lib/fixPrice";
 
+
 type Props = {
-  banner: BannerType[];
+  banner?: BannerType[];
 };
 
 export default function Banner({ banner }: Props) {
+  if (!banner) {
+    return null
+  }
+
+
   return (
     <Link
       href={`/product/${banner[0].slug.current}`}
