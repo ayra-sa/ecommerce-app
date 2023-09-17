@@ -17,7 +17,6 @@ export default function Header({}: Props) {
 
   const router = useRouter();
   const { status, data } = useSession();
-  console.log(data);
 
   return (
     <header className="shadow-md">
