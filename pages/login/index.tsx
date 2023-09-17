@@ -4,16 +4,8 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import * as Yup from "yup";
 
 type Props = {};
-
-const LoginSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email cannot be empty!"),
-  password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password cannot be empty!"),
-});
 
 const Login = (props: Props) => {
   const { status } = useSession();
