@@ -19,7 +19,7 @@ export default function App({
   pageProps: { session, ...pageProps },
 }: AppProps) {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={session} basePath="/login/api/auth">
       <style jsx global>{`
         html {
           font-family: ${poppins.style.fontFamily};
