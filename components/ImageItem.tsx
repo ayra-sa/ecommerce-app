@@ -1,7 +1,6 @@
 import Image from "next/image";
  
 import urlFor from "@/lib/urlFor";
-import { SanityImageAsset } from "@/typing";
 
 type Props = {
   alt: string;

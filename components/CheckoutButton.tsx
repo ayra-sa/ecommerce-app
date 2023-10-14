@@ -1,4 +1,6 @@
 import { loadStripe } from "@stripe/stripe-js";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
 
 type Props = {
@@ -13,8 +15,17 @@ const stripePromise = loadStripe(
 );
 
 const CheckoutButton = ({ cartItems, children, bgColor, bgColorHover }: Props) => {
+  const {status} = useSession()
+  const router = useRouter()
 
   const handleCheckout = async () => {
+    if (status !== "authenticated") {
+      document.cookie = `redirectUrl=${encodeURIComponent(router.asPath)}; path=/`
+
+      router.push(`/login?from=${encodeURIComponent(router.asPath)}`)
+      return
+    }
+
     toast.loading("Redirecting... ");
 
     const stripe = await stripePromise;

@@ -1,4 +1,3 @@
-import { BannerType } from "@/typing";
 import Link from "next/link";
 import ImageItem from "./ImageItem";
 import { fixPrice } from "@/lib/fixPrice";

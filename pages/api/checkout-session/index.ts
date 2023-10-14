@@ -1,4 +1,3 @@
-import { ItemType } from '@/typing';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 

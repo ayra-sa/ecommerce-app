@@ -1,4 +1,4 @@
-export interface ProductType {
+interface ProductType {
   _id: string;
   _createdAt: string;
   name: string;
@@ -11,7 +11,7 @@ export interface ProductType {
   ratings: number[]
 }
 
-export interface BannerType {
+interface BannerType {
   _id: string;
   _createdAt: string;
   name: string;
@@ -24,13 +24,13 @@ export interface BannerType {
 }
 
 
-export interface ItemType {
+interface ItemType {
   name: string,
   price: number,
   quantity: number
 }
 
-export interface ObjectType {
+interface ObjectType {
   name: string,
   image: [],
   price: number
@@ -53,4 +53,16 @@ type ItemImageType = {
   }
   _key: string
   _type: string
+}
+
+interface HeadContext {
+  title: string
+  meta: Meta[]
+}
+
+interface Meta {
+  property?: string
+  name?: string
+  content?: string
+  key?: string
 }

@@ -1,9 +1,8 @@
 import CategoryBanner from "@/components/CategoryBanner";
 import Layout from "@/components/Layout";
+import Product from "@/components/Product";
 import { client } from "@/lib/sanity.client";
-import { ProductType } from "@/typing";
-import Head from "next/head";
-import { Suspense, lazy } from "react";
+import { Suspense } from "react";
 import Skeleton from "react-loading-skeleton";
 
 type Props = {
@@ -19,21 +18,22 @@ type ParamsProps = {
   };
 };
 
-const LazyProduct = lazy(() => import("@/components/Product"));
 
 export default function CategoryDetail({ category, productCategory }: Props) {
+  const headContext: HeadContext = {
+    title: category.title + " Category",
+    meta: [],
+  };
+
   return (
-    <Layout>
-      <Head>
-        <title>{`${category.title} Category`}</title>
-      </Head>
+    <Layout headContext={headContext}>
       <section className="min-h-screen container mx-auto mt-5">
         <CategoryBanner title={category.title} />
 
         <Suspense fallback={<Skeleton height={200} count={4} />}>
           <div className="flex gap-x-5 mt-20">
             {productCategory.map((product) => (
-              <LazyProduct
+              <Product
                 key={product._id}
                 className="w-1/4 shadow-md rounded-md py-5"
                 product={product}
